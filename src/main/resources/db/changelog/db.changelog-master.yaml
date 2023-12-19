@@ -1,0 +1,7 @@
+databaseChangeLog:
+- include:
+   file: db/changelog/sample/db.create_tables.yaml
+   
+- include:
+   file: db/changelog/sample/db.create_tables_example.yaml
+   

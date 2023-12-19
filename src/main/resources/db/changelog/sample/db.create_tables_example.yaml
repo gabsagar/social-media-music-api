@@ -1,0 +1,114 @@
+databaseChangeLog:
+- changeSet:
+    id: test_data_inserts
+    author: prueba
+    changes:
+      - insert:
+          tableName: INSTRUMENTO
+          columns:
+            - column:
+                name: ID
+                value: '1'
+            - column:
+                name: NOMBRE
+                value: 'Guitarra'
+
+      - insert:
+          tableName: INTERES
+          columns:
+            - column:
+                name: ID
+                value: '1'
+            - column:
+                name: NOMBRE
+                value: 'Música'
+
+      - insert:
+          tableName: USUARIO
+          columns:
+            - column:
+                name: ID
+                value: '1'
+            - column:
+                name: NOMBRE
+                value: 'Juan'
+            - column:
+                name: CIUDAD
+                value: 'Ciudad de Ejemplo'
+            - column:
+                name: ESPECIALIDAD
+                value: 'Guitarrista'
+            - column:
+                name: AGRUPACION
+                value: 'Banda Ejemplo'
+            - column:
+                name: FOTO
+                value: 'ruta/a/la/foto.jpg'
+
+      - insert:
+          tableName: EVENTO
+          columns:
+            - column:
+                name: ID
+                value: '1'
+            - column:
+                name: TITULO
+                value: 'Concierto en Vivo'
+            - column:
+                name: FECHA
+                value: '2023-01-01'
+            - column:
+                name: DIRECCION
+                value: 'Lugar del Concierto'
+            - column:
+                name: DESCRIPCION
+                value: 'Descripción del evento'
+            - column:
+                name: FOTO
+                value: 'ruta/a/la/foto_evento.jpg'
+
+      - insert:
+          tableName: INSTRUMENTO_USUARIO
+          columns:
+            - column:
+                name: INSTRUMENTO_ID
+                value: '1'
+            - column:
+                name: USUARIO_ID
+                value: '1'
+
+      - insert:
+          tableName: INTERES_USUARIO
+          columns:
+            - column:
+                name: INTERES_ID
+                value: '1'
+            - column:
+                name: USUARIO_ID
+                value: '1'
+
+      - insert:
+          tableName: USUARIO_EVENTO
+          columns:
+            - column:
+                name: USUARIO_ID
+                value: '1'
+            - column:
+                name: EVENTO_ID
+                value: '1'
+
+      - insert:
+          tableName: EVENTO_INSTRUMENTO
+          columns:
+            - column:
+                name: ID
+                value: '1'
+            - column:
+                name: CANTIDAD
+                value: '2'
+            - column:
+                name: EVENTO_ID
+                value: '1'
+            - column:
+                name: INSTRUMENTO_ID
+                value: '1'
