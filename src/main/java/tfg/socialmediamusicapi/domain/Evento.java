@@ -17,6 +17,7 @@ import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 
 
@@ -26,6 +27,7 @@ import lombok.Data;
 @Data
 @Builder
 @AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "EVENTO")
 public class Evento implements Serializable {
 
@@ -55,8 +57,6 @@ public class Evento implements Serializable {
     @ManyToMany(mappedBy = "eventos", fetch = FetchType.LAZY)
     private List<Usuario> usuarios;
     
-   /* @ManyToMany(mappedBy = "eventos", fetch = FetchType.LAZY)
-    private List<Instrumento> instrumentos; */
     
     @OneToMany(mappedBy = "evento")
     private List<EventoInstrumento> registros;

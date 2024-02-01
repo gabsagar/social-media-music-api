@@ -6,7 +6,8 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.0.12</version>
+		<!-- <version>3.0.12</version>-->
+		<version>2.7.9</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>tfg</groupId>
@@ -57,6 +58,18 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		   <!--MAPSTRUCT-->
+        <dependency>
+    		<groupId>org.mapstruct</groupId>
+    		<artifactId>mapstruct</artifactId>
+    		<version>1.4.2.Final</version> <!-- Verifica la última versión disponible -->
+		</dependency>
+		<dependency>
+    		<groupId>org.mapstruct</groupId>
+    		<artifactId>mapstruct-processor</artifactId>
+    		<version>1.4.2.Final</version> <!-- Verifica la última versión disponible -->
+		</dependency>
+        <!--/MAPSTRUCT-->
 	</dependencies>
 
 	<build>
