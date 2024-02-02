@@ -4,14 +4,17 @@ package tfg.socialmediamusicapi.service;
 
 import java.util.List;
 
-import tfg.socialmediamusicapi.dto.UsuarioDto;
+import tfg.socialmediamusicapi.dto.UsuarioDtoGet;
+import tfg.socialmediamusicapi.dto.UsuarioDtoPost;
 
 
 public interface UsuarioService {
     
-    List<UsuarioDto> getAllUsuarios();
+    List<UsuarioDtoGet> getAllUsuarios();
     
-    UsuarioDto findById(long id);
+    UsuarioDtoGet findById(long id);
+
+    void createUsuario(UsuarioDtoPost usuarioDto);
     
     
 }

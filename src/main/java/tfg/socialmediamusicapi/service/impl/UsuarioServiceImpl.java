@@ -7,7 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import tfg.socialmediamusicapi.domain.Usuario;
-import tfg.socialmediamusicapi.dto.UsuarioDto;
+import tfg.socialmediamusicapi.dto.UsuarioDtoGet;
+import tfg.socialmediamusicapi.dto.UsuarioDtoPost;
 import tfg.socialmediamusicapi.dto.mapper.UsuarioMapper;
 import tfg.socialmediamusicapi.repository.UsuarioRepository;
 import tfg.socialmediamusicapi.service.UsuarioService;
@@ -25,7 +26,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     String message = "El id no existe";
 
     @Override
-    public List<UsuarioDto> getAllUsuarios() {
+    public List<UsuarioDtoGet> getAllUsuarios() {
 	List<Usuario> usuarios = repository.findAll();
 	
 	return mapper.fromDtoList(usuarios);
@@ -33,7 +34,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     
     
     @Override
-    public UsuarioDto findById(long id) {
+    public UsuarioDtoGet findById(long id) {
 	
 	Optional<Usuario> entity = repository.findById(id);
 	
@@ -48,6 +49,16 @@ public class UsuarioServiceImpl implements UsuarioService {
 	    throw new IllegalArgumentException(message);
 	}
 	
+	
+    }
+
+
+    @Override
+    public void createUsuario(UsuarioDtoPost usuarioDto) {
+	
+	Usuario usuario = mapper.fromDtoPost(usuarioDto);
+	
+	repository.save(usuario);
 	
     }
    

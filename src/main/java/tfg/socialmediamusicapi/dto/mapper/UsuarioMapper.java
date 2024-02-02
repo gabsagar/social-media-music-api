@@ -5,18 +5,21 @@ import java.util.List;
 import org.mapstruct.Mapper;
 
 import tfg.socialmediamusicapi.domain.Usuario;
-import tfg.socialmediamusicapi.dto.UsuarioDto;
+import tfg.socialmediamusicapi.dto.UsuarioDtoGet;
+import tfg.socialmediamusicapi.dto.UsuarioDtoPost;
 
 @Mapper(componentModel = "spring")
 public interface UsuarioMapper {
     
-    UsuarioDto fromEnity(Usuario entity);
+    UsuarioDtoGet fromEnity(Usuario entity);
     
-    List<UsuarioDto> fromDtoList(List<Usuario> entities);
+    List<UsuarioDtoGet> fromDtoList(List<Usuario> entities);
     
-    Usuario fromDto(UsuarioDto dto);
+    Usuario fromDto(UsuarioDtoGet dto);
     
-    List<Usuario> fromEntityList(List<UsuarioDto> dtos);
+    Usuario fromDtoPost(UsuarioDtoPost dto);
+    
+    List<Usuario> fromEntityList(List<UsuarioDtoGet> dtos);
 
 
 }
