@@ -38,7 +38,7 @@ public class Interes implements Serializable{
     @Column(name = "NOMBRE",nullable = false)
     private String nombre;
     
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToMany(cascade = CascadeType.DETACH, fetch = FetchType.LAZY)
     @JoinTable(name = "INTERES_USUARIO", joinColumns = @JoinColumn(name = "INTERES_ID"), inverseJoinColumns  = @JoinColumn(name = "USUARIO_ID"))
     private List<Usuario> usuarios;
 

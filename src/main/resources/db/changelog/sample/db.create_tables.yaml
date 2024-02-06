@@ -1,4 +1,5 @@
 databaseChangeLog:
+
 - changeSet:
     id: init create table INSTRUMENTO
     author: gabriel
@@ -112,7 +113,7 @@ databaseChangeLog:
                   referencedColumnNames: ID
                   referencedTableName: USUARIO
                   foreignKeyName: USUARIO_INTERES_USUARIO_ID_FK
-          
+       
     
 
 - changeSet:
@@ -156,6 +157,7 @@ databaseChangeLog:
             - column: 
                 name: FOTO
                 type: VARCHAR(120)
+                
       - createTable:
           tableName: USUARIO_EVENTO
           columns:

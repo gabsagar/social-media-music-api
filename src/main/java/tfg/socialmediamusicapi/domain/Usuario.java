@@ -48,7 +48,7 @@ public class Usuario implements Serializable {
     @Column(name = "FOTO")
     private String foto;
     
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToMany(cascade = CascadeType.DETACH, fetch = FetchType.LAZY)
     @JoinTable(name = "USUARIO_EVENTO", joinColumns = @JoinColumn(name = "USUARIO_ID"), inverseJoinColumns  = @JoinColumn(name = "EVENTO_ID"))
     private List<Evento> eventos;
     
