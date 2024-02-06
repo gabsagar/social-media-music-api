@@ -5,17 +5,20 @@ import java.util.List;
 import org.mapstruct.Mapper;
 
 import tfg.socialmediamusicapi.domain.Instrumento;
-import tfg.socialmediamusicapi.dto.InstrumentoDto;
+import tfg.socialmediamusicapi.dto.InstrumentoDtoGet;
+import tfg.socialmediamusicapi.dto.InstrumentoDtoPost;
 
 @Mapper(componentModel = "spring")
 public interface InstrumentoMapper {
     
-    InstrumentoDto fromEnity(Instrumento entity);
+    InstrumentoDtoGet fromEnity(Instrumento entity);
     
-    List<InstrumentoDto> fromDtoList(List<Instrumento> entities);
+    List<InstrumentoDtoGet> fromDtoList(List<Instrumento> entities);
     
-    Instrumento fromDto(InstrumentoDto dto);
+    Instrumento fromDto(InstrumentoDtoGet dto);
     
-    List<Instrumento> fromEntityList(List<InstrumentoDto> dtos);
+    Instrumento fromDtoPost(InstrumentoDtoPost dto);
+    
+    List<Instrumento> fromEntityList(List<InstrumentoDtoGet> dtos);
 
 }

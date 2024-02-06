@@ -20,32 +20,31 @@ import tfg.socialmediamusicapi.service.UsuarioService;
 
 @RestController
 @Api(tags = "Usuario Api")
-
-
 public class UsuarioController {
-    
+
     @Autowired
     private UsuarioService service;
-    
+
     @GetMapping("/usuarios")
-    @Operation(summary = "Recupera todos los usuarios")  
-    public List<UsuarioDtoGet> getAllUsuarios(){
-	
+    @Operation(summary = "Recupera todos los usuarios")
+    public List<UsuarioDtoGet> getAllUsuarios() {
+
 	return service.getAllUsuarios();
     }
-    
+
     @GetMapping("/usuarios/{id}")
+    @Operation(summary = "Recupera un usuario por id")
     public UsuarioDtoGet finById(@PathVariable("id") long id) {
-	
+
 	return service.findById(id);
     }
-    
-    @PostMapping("/usuarios")
-    public ResponseEntity<String> crearUsuario(@RequestBody UsuarioDtoPost usuarioDto) {
-        service.createUsuario(usuarioDto);
 
-        
-        return new ResponseEntity<>("Operación exitosa", HttpStatus.OK);
+    @PostMapping("/usuarios")
+    @Operation(summary = "Guarda un usuario")
+    public ResponseEntity<String> crearUsuario(@RequestBody UsuarioDtoPost usuarioDto) {
+	service.createUsuario(usuarioDto);
+
+	return new ResponseEntity<>("Operación exitosa", HttpStatus.OK);
     }
 
 }

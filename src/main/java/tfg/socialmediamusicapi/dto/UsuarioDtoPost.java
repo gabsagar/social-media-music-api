@@ -12,8 +12,10 @@ import lombok.NoArgsConstructor;
 @Data
 public class UsuarioDtoPost {
     
+    
     @JsonProperty(value="nombre")
     private String nombre;
+    
     
     @JsonProperty(value="ciudad")
     private String ciudad;

@@ -2,10 +2,12 @@ package tfg.socialmediamusicapi.service;
 
 import java.util.List;
 
-import tfg.socialmediamusicapi.dto.InteresDto;
+import tfg.socialmediamusicapi.dto.InteresDtoGet;
 
 public interface InteresService {
     
-    List<InteresDto> getAllIntereses();
+    List<InteresDtoGet> getAllIntereses();
+
+    InteresDtoGet findById(long id);
 
 }

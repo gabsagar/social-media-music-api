@@ -31,9 +31,9 @@ public class Usuario implements Serializable {
     
     private static final long serialVersionUID = 1L;
     
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID",nullable = false, updatable = false)
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     
     @Column(name = "NOMBRE",nullable = false)

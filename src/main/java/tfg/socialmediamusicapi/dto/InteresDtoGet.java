@@ -1,7 +1,5 @@
 package tfg.socialmediamusicapi.dto;
 
-import java.time.LocalDateTime;
-
 import org.springframework.validation.annotation.Validated;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -12,16 +10,13 @@ import lombok.NoArgsConstructor;
 @Validated
 @NoArgsConstructor
 @Data
-public class EventoDto {
-    
+public class InteresDtoGet {
+   
     @JsonProperty(value = "id")
     private long id;
     
-    @JsonProperty(value="titulo")
-    private String titulo;
-    
-    @JsonProperty(value="fecha")
-    private LocalDateTime fecha;
+    @JsonProperty(value="nombre")
+    private String nombre;
     
 
 }

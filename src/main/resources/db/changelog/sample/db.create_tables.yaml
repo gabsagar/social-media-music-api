@@ -2,7 +2,7 @@ databaseChangeLog:
 - changeSet:
     id: init create table INSTRUMENTO
     author: gabriel
-    comment: changelog to create APLICACION domain entities
+    comment: changelog to create INSTRUMENTO domain entities
     dbms: h2, mysql
     changes:
       - createTable:
@@ -22,7 +22,7 @@ databaseChangeLog:
 - changeSet:
     id: init create table INTERES
     author: gabriel
-    comment: changelog to create APLICACION domain entities
+    comment: changelog to create INTERES domain entities
     dbms: h2, mysql
     changes:
       - createTable:
@@ -42,7 +42,7 @@ databaseChangeLog:
 - changeSet:
     id: init create table USUARIO
     author: gabriel
-    comment: changelog to create APLICACION domain entities
+    comment: changelog to create USUARIO domain entities
     dbms: h2, mysql
     changes:
       - createTable:
@@ -73,6 +73,7 @@ databaseChangeLog:
             - column: 
                 name: FOTO
                 type: VARCHAR(120)
+                
       - createTable:
           tableName: INSTRUMENTO_USUARIO
           columns:
@@ -117,7 +118,7 @@ databaseChangeLog:
 - changeSet:
     id: init create table EVENTO
     author: gabriel
-    comment: changelog to create APLICACION domain entities
+    comment: changelog to create EVENTO domain entities
     dbms: h2, mysql
     changes:
       - createTable:
@@ -142,6 +143,11 @@ databaseChangeLog:
             - column: 
                 name: DIRECCION
                 type: VARCHAR(120)
+                constraints:
+                  nullable: false
+            - column: 
+                name: TIPO
+                type: VARCHAR(60)
                 constraints:
                   nullable: false
             - column: 

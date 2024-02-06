@@ -5,19 +5,22 @@ import java.util.List;
 import org.mapstruct.Mapper;
 
 import tfg.socialmediamusicapi.domain.Evento;
-import tfg.socialmediamusicapi.dto.EventoDto;
+import tfg.socialmediamusicapi.dto.EventoDtoGet;
+import tfg.socialmediamusicapi.dto.EventoDtoPost;
 
 
 @Mapper(componentModel = "spring")
 public interface EventoMapper {
     
-    EventoDto fromEnity(Evento entity);
+    EventoDtoGet fromEnity(Evento entity);
     
-    List<EventoDto> fromDtoList(List<Evento> entities);
+    List<EventoDtoGet> fromDtoList(List<Evento> entities);
     
-    Evento fromDto(EventoDto dto);
+    Evento fromDto(EventoDtoGet dto);
     
-    List<Evento> fromEntityList(List<EventoDto> dtos);
+    Evento fromDtoPost(EventoDtoPost dto);
+    
+    List<Evento> fromEntityList(List<EventoDtoGet> dtos);
 
     
 }

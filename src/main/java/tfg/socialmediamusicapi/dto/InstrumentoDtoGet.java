@@ -10,13 +10,12 @@ import lombok.NoArgsConstructor;
 @Validated
 @NoArgsConstructor
 @Data
-public class InteresDto {
-   
+public class InstrumentoDtoGet {
+    
     @JsonProperty(value = "id")
     private long id;
     
     @JsonProperty(value="nombre")
     private String nombre;
-    
 
 }

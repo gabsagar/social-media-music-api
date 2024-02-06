@@ -10,12 +10,9 @@ import lombok.NoArgsConstructor;
 @Validated
 @NoArgsConstructor
 @Data
-public class InstrumentoDto {
-    
-    @JsonProperty(value = "id")
-    private long id;
-    
-    @JsonProperty(value="nombre")
+public class InstrumentoDtoPost {
+
+    @JsonProperty(value = "nombre")
     private String nombre;
 
 }
