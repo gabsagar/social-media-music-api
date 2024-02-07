@@ -1,45 +1,7 @@
 databaseChangeLog:
 
-- changeSet:
-    id: init create table INSTRUMENTO
-    author: gabriel
-    comment: changelog to create INSTRUMENTO domain entities
-    dbms: h2, mysql
-    changes:
-      - createTable:
-          tableName: INSTRUMENTO
-          columns:
-            - column: 
-                name: ID
-                type: BIGINT 
-                constraints:
-                  primaryKey: true
-                  nullable: false
-            - column: 
-                name: NOMBRE
-                type: VARCHAR(60)
-                constraints:
-                  nullable: false
-- changeSet:
-    id: init create table INTERES
-    author: gabriel
-    comment: changelog to create INTERES domain entities
-    dbms: h2, mysql
-    changes:
-      - createTable:
-          tableName: INTERES
-          columns:
-            - column: 
-                name: ID
-                type: BIGINT 
-                constraints:
-                  primaryKey: true
-                  nullable: false
-            - column: 
-                name: NOMBRE
-                type: VARCHAR(60)
-                constraints:
-                  nullable: false
+
+
 - changeSet:
     id: init create table USUARIO
     author: gabriel
@@ -51,7 +13,7 @@ databaseChangeLog:
           columns:
             - column: 
                 name: ID
-                type: BIGINT 
+                type: SERIAL 
                 constraints:
                   primaryKey: true
                   nullable: false
@@ -75,150 +37,16 @@ databaseChangeLog:
                 name: FOTO
                 type: VARCHAR(120)
                 
-      - createTable:
-          tableName: INSTRUMENTO_USUARIO
-          columns:
-            - column: 
-                name: INSTRUMENTO_ID
-                type: BIGINT
-                constraints:
-                  nullable: false
-                  referencedColumnNames: ID
-                  referencedTableName: INSTRUMENTO
-                  foreignKeyName: INSTRUMENTO_USUARIO_INSTRUMENTO_ID_FK
-            - column: 
-                name: USUARIO_ID
-                type: BIGINT
-                constraints:
-                  nullable: false
-                  referencedColumnNames: ID
-                  referencedTableName: USUARIO
-                  foreignKeyName: USUARIO_INSTRUMENTO_USUARIO_ID_FK
-      - createTable:
-          tableName: INTERES_USUARIO
-          columns:
-            - column: 
-                name: INTERES_ID
-                type: BIGINT
-                constraints:
-                  nullable: false
-                  referencedColumnNames: ID
-                  referencedTableName: INTERES
-                  foreignKeyName: INTERES_USUARIO_INTERES_ID_FK
-            - column: 
-                name: USUARIO_ID
-                type: BIGINT
-                constraints:
-                  nullable: false
-                  referencedColumnNames: ID
-                  referencedTableName: USUARIO
-                  foreignKeyName: USUARIO_INTERES_USUARIO_ID_FK
+
        
     
 
-- changeSet:
-    id: init create table EVENTO
-    author: gabriel
-    comment: changelog to create EVENTO domain entities
-    dbms: h2, mysql
-    changes:
-      - createTable:
-          tableName: EVENTO
-          columns:
-            - column: 
-                name: ID
-                type: BIGINT 
-                constraints:
-                  primaryKey: true
-                  nullable: false
-            - column: 
-                name: TITULO
-                type: VARCHAR(60)
-                constraints:
-                  nullable: false
-            - column: 
-                name: FECHA
-                type: DATE
-                constraints:
-                  nullable: false
-            - column: 
-                name: DIRECCION
-                type: VARCHAR(120)
-                constraints:
-                  nullable: false
-            - column: 
-                name: TIPO
-                type: VARCHAR(60)
-                constraints:
-                  nullable: false
-            - column: 
-                name: DESCRIPCION
-                type: VARCHAR(1000)
-            - column: 
-                name: FOTO
-                type: VARCHAR(120)
-                
-      - createTable:
-          tableName: USUARIO_EVENTO
-          columns:
-            - column: 
-                name: USUARIO_ID
-                type: BIGINT
-                constraints:
-                  nullable: false
-                  referencedColumnNames: ID
-                  referencedTableName: USUARIO
-                  foreignKeyName: USUARIO_EVENTO_USUARIO_ID_FK
-            - column: 
-                name: EVENTO_ID
-                type: BIGINT
-                constraints:
-                  nullable: false
-                  referencedColumnNames: ID
-                  referencedTableName: EVENTO
-                  foreignKeyName: EVENTO_USUARIO_EVENTO_ID_FK
 
             
             
 
            
-- changeSet:
-    id: init create table EVENTO_INSTRUMENTO
-    author: gabriel
-    comment: changelog to create APLICACION domain entities
-    dbms: h2, mysql
-    changes:
-      - createTable:
-          tableName: EVENTO_INSTRUMENTO
-          columns:
-            - column: 
-                name: ID
-                type: BIGINT 
-                constraints:
-                  primaryKey: true
-                  nullable: false
-            - column: 
-                name: CANTIDAD
-                type: BIGINT
-                constraints:
-                  nullable: false
-            - column:
-                name: EVENTO_ID
-                type: BIGINT  
-                constraints:
-                  nullable: false
-                  referencedColumnNames: ID
-                  referencedTableName: EVENTO
-                  foreignKeyName: EVENTO_INSTRUMENTO_INSTRUMENTO_ID_FK
-                
-            - column:
-                name: INSTRUMENTO_ID
-                type: BIGINT  
-                constraints:
-                  nullable: false
-                  referencedColumnNames: ID
-                  referencedTableName: INSTRUMENTO
-                  foreignKeyName: INSTRUMENTO_EVENTO_INSTRUMENTO_ID_FK
+
             
                       
                       

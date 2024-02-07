@@ -3,45 +3,7 @@ databaseChangeLog:
     id: test_data_inserts
     author: prueba
     changes:
-      - insert:
-          tableName: INSTRUMENTO
-          columns:
-            - column:
-                name: ID
-                value: '1'
-            - column:
-                name: NOMBRE
-                value: 'Guitarra'
-                
-      - insert:
-          tableName: INSTRUMENTO
-          columns:
-            - column:
-                name: ID
-                value: '2'
-            - column:
-                name: NOMBRE
-                value: 'Piano'
-
-      - insert:
-          tableName: INTERES
-          columns:
-            - column:
-                name: ID
-                value: '1'
-            - column:
-                name: NOMBRE
-                value: 'Música'
-      - insert:
-          tableName: INTERES
-          columns:
-            - column:
-                name: ID
-                value: '2'
-            - column:
-                name: NOMBRE
-                value: 'Banda'
-
+      
       - insert:
           tableName: USUARIO
           columns:
@@ -86,98 +48,7 @@ databaseChangeLog:
                 name: FOTO
                 value: 'ruta/a/la/foto.jpg'
 
-      - insert:
-          tableName: EVENTO
-          columns:
-            - column:
-                name: ID
-                value: '1'
-            - column:
-                name: TITULO
-                value: 'Concierto en Vivo'
-            - column:
-                name: FECHA
-                value: '2023-01-01'
-            - column:
-                name: DIRECCION
-                value: 'Lugar del Concierto'
-            - column:
-                name: TIPO
-                value: 'Concierto'
-            - column:
-                name: DESCRIPCION
-                value: 'Descripción del evento'
-            - column:
-                name: FOTO
-                value: 'ruta/a/la/foto_evento.jpg'
-                
-      - insert:
-          tableName: EVENTO
-          columns:
-            - column:
-                name: ID
-                value: '2'
-            - column:
-                name: TITULO
-                value: 'MARCHALES CONCERT'
-            - column:
-                name: FECHA
-                value: '2024-01-01'
-            - column:
-                name: DIRECCION
-                value: 'MARCHALENES'
-            - column:
-                name: TIPO
-                value: 'Pasacalles'
-            - column:
-                name: DESCRIPCION
-                value: 'Una descripción'
-            - column:
-                name: FOTO
-                value: 'ruta/a/la/foto_evento.jpg'
 
-      - insert:
-          tableName: INSTRUMENTO_USUARIO
-          columns:
-            - column:
-                name: INSTRUMENTO_ID
-                value: '1'
-            - column:
-                name: USUARIO_ID
-                value: '1'
 
-      - insert:
-          tableName: INTERES_USUARIO
-          columns:
-            - column:
-                name: INTERES_ID
-                value: '1'
-            - column:
-                name: USUARIO_ID
-                value: '1'
+    
 
-      - insert:
-          tableName: USUARIO_EVENTO
-          columns:
-            - column:
-                name: USUARIO_ID
-                value: '1'
-            - column:
-                name: EVENTO_ID
-                value: '1'
-
-      - insert:
-          tableName: EVENTO_INSTRUMENTO
-          columns:
-            - column:
-                name: ID
-                value: '1'
-            - column:
-                name: CANTIDAD
-                value: '2'
-            - column:
-                name: EVENTO_ID
-                value: '1'
-            - column:
-                name: INSTRUMENTO_ID
-                value: '1'
