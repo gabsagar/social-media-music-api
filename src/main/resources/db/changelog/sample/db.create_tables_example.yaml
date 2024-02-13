@@ -1,53 +1,53 @@
-databaseChangeLog:
-- changeSet:
-    id: test_data_inserts
-    author: prueba
-    changes:
-      
-      - insert:
-          tableName: USUARIO
-          columns:
-            - column:
-                name: ID
-                value: '1'
-            - column:
-                name: NOMBRE
-                value: 'Juan'
-            - column:
-                name: CIUDAD
-                value: 'Madrid'
-            - column:
-                name: ESPECIALIDAD
-                value: 'Guitarrista'
-            - column:
-                name: AGRUPACION
-                value: 'Leganes band'
-            - column:
-                name: FOTO
-                value: 'ruta/a/la/foto.jpg'
-                
-      - insert:
-          tableName: USUARIO
-          columns:
-            - column:
-                name: ID
-                value: '2'
-            - column:
-                name: NOMBRE
-                value: 'Gabriel'
-            - column:
-                name: CIUDAD
-                value: 'Valencia'
-            - column:
-                name: ESPECIALIDAD
-                value: 'Trompetista'
-            - column:
-                name: AGRUPACION
-                value: 'Tendetes'
-            - column:
-                name: FOTO
-                value: 'ruta/a/la/foto.jpg'
-
+#databaseChangeLog:
+#- changeSet:
+#    id: test_data_inserts
+#    author: prueba
+#    changes:
+#      
+#      - insert:
+#          tableName: USUARIO
+#          columns:
+#            - column:
+#                name: ID
+#                value: '1'
+#            - column:
+#                name: NOMBRE
+#                value: 'Juan'
+#            - column:
+#                name: CIUDAD
+#                value: 'Madrid'
+#            - column:
+#                name: ESPECIALIDAD
+#                value: 'Guitarrista'
+#            - column:
+#                name: AGRUPACION
+#                value: 'Leganes band'
+#            - column:
+#                name: FOTO
+#                value: 'ruta/a/la/foto.jpg'
+#                
+#      - insert:
+#          tableName: USUARIO
+#          columns:
+#            - column:
+#                name: ID
+#                value: '2'
+#            - column:
+#                name: NOMBRE
+#                value: 'Gabriel'
+#            - column:
+#                name: CIUDAD
+#                value: 'Valencia'
+#            - column:
+#                name: ESPECIALIDAD
+#                value: 'Trompetista'
+#            - column:
+#                name: AGRUPACION
+#                value: 'Tendetes'
+#            - column:
+#                name: FOTO
+#                value: 'ruta/a/la/foto.jpg'
+#
 
 
     

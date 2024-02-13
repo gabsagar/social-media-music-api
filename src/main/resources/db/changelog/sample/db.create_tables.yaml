@@ -37,6 +37,98 @@ databaseChangeLog:
                 name: FOTO
                 type: VARCHAR(120)
                 
+- changeSet:
+    id: init create table EVENTO
+    author: gabriel
+    comment: changelog to create EVENTO domain entities
+    dbms: h2, mysql
+    changes:
+      - createTable:
+          tableName: EVENTO
+          columns:
+            - column: 
+                name: ID
+                type: SERIAL 
+                constraints:
+                  primaryKey: true
+                  nullable: false
+            - column: 
+                name: TITULO
+                type: VARCHAR(60)
+                constraints:
+                  nullable: false
+            - column: 
+                name: FECHA
+                type: TIMESTAMP
+                constraints:
+                  nullable: false
+            - column: 
+                name: DIRECCION
+                type: VARCHAR(120)
+                constraints:
+                  nullable: false
+            - column: 
+                name: TIPO
+                type: VARCHAR(60)
+                constraints:
+                  nullable: false
+            - column: 
+                name: DESCRIPCION
+                type: VARCHAR(1000)
+            - column: 
+                name: FOTO
+                type: VARCHAR(120)
+                
+
+- changeSet:
+    id: init create table INTERES
+    author: gabriel
+    comment: changelog to create INTERES domain entities
+    dbms: h2, mysql
+    changes:
+      - createTable:
+          tableName: INTERES
+          columns:
+            - column: 
+                name: ID
+                type: SERIAL 
+                constraints:
+                  primaryKey: true
+                  nullable: false
+            - column: 
+                name: NOMBRE
+                type: VARCHAR(60)
+                constraints:
+                  nullable: false
+                
+- changeSet:
+    id: init create table USUARIO_INTERES
+    author: gabriel
+    comment: changelog to create USUARIO_INSTRUMENTO domain entities
+    dbms: h2, mysql
+    changes:
+      - createTable:
+          tableName: USUARIO_INTERES
+          columns:
+          
+            - column: 
+                name: USUARIO_ID
+                type: BIGINT
+                constraints:
+                  nullable: false
+                  referencedColumnNames: ID
+                  referencedTableName: USUARIO
+                  foreignKeyName: USUARIO_INTERES_USUARIO_ID_FK
+                  
+            - column: 
+                name: INTERES_ID
+                type: BIGINT
+                constraints:
+                  nullable: false
+                  referencedColumnNames: ID
+                  referencedTableName: INTERES
+                  foreignKeyName: INTERES_USUARIO_INTERES_ID_FK                
+
 
        
     

@@ -14,12 +14,15 @@ import org.springframework.web.bind.annotation.RestController;
 import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
 
+import lombok.Data;
+import tfg.socialmediamusicapi.dto.AsignarInteresDto;
 import tfg.socialmediamusicapi.dto.UsuarioDtoGet;
 import tfg.socialmediamusicapi.dto.UsuarioDtoPost;
 import tfg.socialmediamusicapi.service.UsuarioService;
 
 @RestController
 @Api(tags = "Usuario Api")
+@Data
 public class UsuarioController {
 
     @Autowired
@@ -46,5 +49,15 @@ public class UsuarioController {
 
 	return new ResponseEntity<>("Operación exitosa", HttpStatus.OK);
     }
+    
+    @PostMapping("/usuario_interes")
+    @Operation(summary = "Guarda un usuario con un interes asignado")
+    public ResponseEntity<String> asignarInteres(@RequestBody AsignarInteresDto dto) {
+	service.asignarInteres((Long)dto.getUsuarioId(), (Long)dto.getInteresId());
+
+	return new ResponseEntity<>("Operación exitosa", HttpStatus.OK);
+    }
+    
+    
 
 }

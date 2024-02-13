@@ -15,6 +15,8 @@ public interface UsuarioService {
     UsuarioDtoGet findById(long id);
 
     void createUsuario(UsuarioDtoPost usuarioDto);
+
+    void asignarInteres(Long usuarioId, Long interesId);
     
     
 }
