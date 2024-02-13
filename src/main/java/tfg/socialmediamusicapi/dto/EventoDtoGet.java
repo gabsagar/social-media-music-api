@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 @Validated
 @NoArgsConstructor
 @Data
-
 public class EventoDtoGet {
 
     @JsonProperty(value = "id")
@@ -26,5 +25,8 @@ public class EventoDtoGet {
 
     @JsonProperty(value = "tipo")
     private String tipo;
+    
+    @JsonProperty(value = "direccion")
+    private String direccion;
 
 }

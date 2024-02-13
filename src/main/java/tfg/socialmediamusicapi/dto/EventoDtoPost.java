@@ -2,6 +2,7 @@ package tfg.socialmediamusicapi.dto;
 
 import java.time.LocalDateTime;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.validation.annotation.Validated;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -16,7 +17,8 @@ public class EventoDtoPost {
 
     @JsonProperty(value = "titulo")
     private String titulo;
-
+    
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     @JsonProperty(value = "fecha")
     private LocalDateTime fecha;
 
