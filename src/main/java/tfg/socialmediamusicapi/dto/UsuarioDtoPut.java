@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Validated
 @NoArgsConstructor
 @Data
-public class UsuarioDtoPost {
+public class UsuarioDtoPut {
 
     @JsonProperty(value = "nombre")
     private String nombre;
@@ -20,8 +20,6 @@ public class UsuarioDtoPost {
 
     @JsonProperty(value = "agrupacion")
     private String agrupacion;
-    
-    
 
     public String getNombre() {
 	

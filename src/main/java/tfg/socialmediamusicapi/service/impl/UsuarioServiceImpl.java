@@ -6,21 +6,24 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import lombok.Data;
 import tfg.socialmediamusicapi.domain.Interes;
 import tfg.socialmediamusicapi.domain.Usuario;
 import tfg.socialmediamusicapi.dto.UsuarioDtoGet;
 import tfg.socialmediamusicapi.dto.UsuarioDtoPost;
+import tfg.socialmediamusicapi.dto.UsuarioDtoPut;
 import tfg.socialmediamusicapi.dto.mapper.UsuarioMapper;
 import tfg.socialmediamusicapi.repository.InteresRepository;
 import tfg.socialmediamusicapi.repository.UsuarioRepository;
 import tfg.socialmediamusicapi.service.UsuarioService;
 
 @Service
+@Data
 public class UsuarioServiceImpl implements UsuarioService {
 
     @Autowired
     private UsuarioRepository repository;
-    
+
     @Autowired
     private InteresRepository repositoryInteres;
 
@@ -62,29 +65,61 @@ public class UsuarioServiceImpl implements UsuarioService {
     }
 
     @Override
-    public void asignarInteres(Long usuarioId, Long interesId) {
+    public void modificarUsuario(long id, UsuarioDtoPut usuarioDto) {
+	Optional<Usuario> usuarioEntity = repository.findById(id);
+
+	if (usuarioEntity.isPresent()) {
+
+	    Usuario usuario = usuarioEntity.orElseThrow();
+	    usuario.setNombre(usuarioDto.getNombre());
+	    usuario.setCiudad(usuarioDto.getCiudad());
+	    usuario.setAgrupacion(usuarioDto.getAgrupacion());
+	    repository.save(usuario);
+
+	} else {
+	    throw new IllegalArgumentException(message);
+	}
+    }
+
+    @Override
+    public void agregarInteres(long usuarioId, long interesId) {
 	Optional<Usuario> usuarioEntity = repository.findById(usuarioId);
-	
 	Optional<Interes> interesEntity = repositoryInteres.findById(interesId);
-	
-	if (usuarioEntity.isPresent()&& interesEntity.isPresent() ) {
-	    
+
+	if (usuarioEntity.isPresent() && interesEntity.isPresent()) {
+
 	    Usuario usuario = usuarioEntity.orElseThrow();
 	    Interes interes = interesEntity.orElseThrow();
-	    
+
 	    usuario.getIntereses().add(interes);
 	    interes.getUsuarios().add(usuario);
-	    
+
 	    repository.save(usuario);
 	    repositoryInteres.save(interes);
-	   
+
 	} else {
 
 	    throw new IllegalArgumentException(message);
 	}
-	
+
     }
-   
+
+    @Override
+    public void eliminarUsuario(long id) {
+	Optional<Usuario> usuarioEntity = repository.findById(id);
+
+	if (usuarioEntity.isPresent()) {
+	    Usuario usuario = usuarioEntity.orElseThrow();
+	    usuario.getIntereses().forEach(interes -> interes.getUsuarios().remove(usuario));
+	    usuario.getIntereses().clear();
+	    repository.delete(usuario);
+	} else {
+
+	    throw new IllegalArgumentException(message);
+
+	}
+    }
+
     
 
 }

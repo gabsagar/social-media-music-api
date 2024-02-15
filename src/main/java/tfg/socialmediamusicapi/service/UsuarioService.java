@@ -6,6 +6,7 @@ import java.util.List;
 
 import tfg.socialmediamusicapi.dto.UsuarioDtoGet;
 import tfg.socialmediamusicapi.dto.UsuarioDtoPost;
+import tfg.socialmediamusicapi.dto.UsuarioDtoPut;
 
 
 public interface UsuarioService {
@@ -16,7 +17,12 @@ public interface UsuarioService {
 
     void createUsuario(UsuarioDtoPost usuarioDto);
 
-    void asignarInteres(Long usuarioId, Long interesId);
+
+    void modificarUsuario(long id, UsuarioDtoPut usuarioDto);
+
+    void agregarInteres(long usuarioId, long interesId);
+
+    void eliminarUsuario(long id);
     
     
 }

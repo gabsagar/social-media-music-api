@@ -46,16 +46,36 @@ public class Usuario implements Serializable {
 
     @Column(name = "FOTO")
     private String foto;
-    
+
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinTable(name = "USUARIO_INTERES", joinColumns = @JoinColumn(name = "USUARIO_ID"), inverseJoinColumns  = @JoinColumn(name = "INTERES_ID"))
+    @JoinTable(name = "USUARIO_INTERES", joinColumns = @JoinColumn(name = "USUARIO_ID"), inverseJoinColumns = @JoinColumn(name = "INTERES_ID"))
     private List<Interes> intereses;
+
+   
 
     public List<Interes> getIntereses() {
 
 	return intereses;
     }
 
-   
+    public String getNombre() {
+
+	return nombre;
+    }
+
+    public void setNombre(String nombre) {
+	this.nombre = nombre;
+
+    }
+
+    public void setCiudad(String ciudad) {
+	this.ciudad = ciudad;
+	
+    }
+    
+    public void setAgrupacion(String agrupacion) {
+	this.agrupacion = agrupacion;
+	
+    }
 
 }

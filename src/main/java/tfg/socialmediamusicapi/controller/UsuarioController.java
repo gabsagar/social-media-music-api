@@ -5,9 +5,11 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -15,9 +17,9 @@ import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
 
 import lombok.Data;
-import tfg.socialmediamusicapi.dto.AsignarInteresDto;
 import tfg.socialmediamusicapi.dto.UsuarioDtoGet;
 import tfg.socialmediamusicapi.dto.UsuarioDtoPost;
+import tfg.socialmediamusicapi.dto.UsuarioDtoPut;
 import tfg.socialmediamusicapi.service.UsuarioService;
 
 @RestController
@@ -49,15 +51,27 @@ public class UsuarioController {
 
 	return new ResponseEntity<>("Operación exitosa", HttpStatus.OK);
     }
-    
-    @PostMapping("/usuario_interes")
-    @Operation(summary = "Guarda un usuario con un interes asignado")
-    public ResponseEntity<String> asignarInteres(@RequestBody AsignarInteresDto dto) {
-	service.asignarInteres((Long)dto.getUsuarioId(), (Long)dto.getInteresId());
+
+    @PutMapping("/usuarios/{id}")
+    @Operation(summary = "Modifica un usuario")
+    public ResponseEntity<String> modificarUsuario(@PathVariable("id") long id, @RequestBody UsuarioDtoPut usuarioDto) {
+	service.modificarUsuario(id, usuarioDto);
 
 	return new ResponseEntity<>("Operación exitosa", HttpStatus.OK);
     }
     
+    @PutMapping("/{usuarioId}/intereses/{interesId}")
+    @Operation(summary = "Añade un nuevo interés a un usuario existente")
+    public ResponseEntity<String> agregarInteresUsuario(@PathVariable long usuarioId, @PathVariable long interesId){
+	service.agregarInteres(usuarioId,interesId);
+	return new ResponseEntity<>("Operación exitosa", HttpStatus.OK);
+    }
     
+    @DeleteMapping("/{id}")
+    @Operation(summary = "Elimina un usuario y sus relaciones")
+    public ResponseEntity<String> eliminarUsuario(@PathVariable("id") long id){
+	service.eliminarUsuario(id);
+	return new ResponseEntity<>("Operación exitosa", HttpStatus.OK);
+    }
 
 }

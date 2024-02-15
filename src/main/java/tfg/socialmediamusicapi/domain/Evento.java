@@ -47,7 +47,8 @@ public class Evento implements Serializable {
 
     @Column(name = "FOTO")
     private String foto;
-
+    
+   
    
 
 }
