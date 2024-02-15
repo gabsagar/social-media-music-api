@@ -23,6 +23,8 @@ public interface UsuarioService {
     void agregarInteres(long usuarioId, long interesId);
 
     void eliminarUsuario(long id);
+
+    void eliminarInteres(long usuarioId, long interesId);
     
     
 }

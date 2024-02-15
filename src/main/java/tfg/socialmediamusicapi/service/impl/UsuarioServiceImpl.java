@@ -120,6 +120,29 @@ public class UsuarioServiceImpl implements UsuarioService {
 	}
     }
 
+    @Override
+    public void eliminarInteres(long usuarioId, long interesId) {
+	Optional<Usuario> usuarioEntity = repository.findById(usuarioId);
+	Optional<Interes> interesEntity = repositoryInteres.findById(interesId);
+	
+	if (usuarioEntity.isPresent() && interesEntity.isPresent()) {
+
+	    Usuario usuario = usuarioEntity.orElseThrow();
+	    Interes interes = interesEntity.orElseThrow();
+
+	    usuario.getIntereses().remove(interes);
+	    interes.getUsuarios().remove(usuario);
+
+	    repository.save(usuario);
+	    repositoryInteres.save(interes);
+
+	} else {
+
+	    throw new IllegalArgumentException(message);
+	}
+	
+    }
+
     
 
 }

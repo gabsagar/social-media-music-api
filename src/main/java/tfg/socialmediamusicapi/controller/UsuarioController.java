@@ -67,6 +67,11 @@ public class UsuarioController {
 	return new ResponseEntity<>("Operación exitosa", HttpStatus.OK);
     }
     
+    public ResponseEntity<String> eliminarInteresUsuario(@PathVariable long usuarioId, @PathVariable long interesId){
+	service.eliminarInteres(usuarioId,interesId);
+	return new ResponseEntity<>("Operación exitosa", HttpStatus.OK);
+    }
+    
     @DeleteMapping("/{id}")
     @Operation(summary = "Elimina un usuario y sus relaciones")
     public ResponseEntity<String> eliminarUsuario(@PathVariable("id") long id){
