@@ -25,6 +25,13 @@ public interface UsuarioService {
     void eliminarUsuario(long id);
 
     void eliminarInteres(long usuarioId, long interesId);
-    
+
+    void agregarEvento(long usuarioId, long eventoId);
+
+    void eliminarEvento(long usuarioId, long eventoId);
+
+    void agregarInstrumento(long usuarioId, long instrumentoId);
+
+   
     
 }

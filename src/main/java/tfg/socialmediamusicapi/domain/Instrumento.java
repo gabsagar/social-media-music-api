@@ -22,32 +22,39 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "INTERES")
-public class Interes implements Serializable{
+@Table(name = "INSTRUMENTO")
+public class Instrumento implements Serializable {
     
     private static final long serialVersionUID = 1L;
     
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID",nullable = false, updatable = false)
-    @Id
+    @Id    
     private long id;
     
-    @Column(name = "NOMBRE", nullable = false)
+    @Column(name = "NOMBRE",nullable = false)
     private String nombre;
     
-    @ManyToMany(mappedBy = "intereses", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "instrumentos", fetch = FetchType.LAZY)
     private List<Usuario> usuarios;
+    
+    @ManyToMany(mappedBy = "instrumentos", fetch = FetchType.LAZY)
+    private List<Evento> eventos;
+
+    public void setNombre(String nombre) {
+	this.nombre = nombre;
+	
+    }
 
     public List<Usuario> getUsuarios() {
 	
 	return usuarios;
     }
 
-    public void setNombre(String nombre) {
-	this.nombre = nombre;
+    public List<Evento> getEventos() {
 	
+	return eventos;
     }
+   
     
-  
-
 }

@@ -50,6 +50,14 @@ public class Usuario implements Serializable {
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(name = "USUARIO_INTERES", joinColumns = @JoinColumn(name = "USUARIO_ID"), inverseJoinColumns = @JoinColumn(name = "INTERES_ID"))
     private List<Interes> intereses;
+    
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinTable(name = "USUARIO_EVENTO", joinColumns = @JoinColumn(name = "USUARIO_ID"), inverseJoinColumns  = @JoinColumn(name = "EVENTO_ID"))
+    private List<Evento> eventos;
+    
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinTable(name = "USUARIO_INSTRUMENTO", joinColumns = @JoinColumn(name = "USUARIO_ID"), inverseJoinColumns  = @JoinColumn(name = "INSTRUMENTO_ID"))
+    private List<Instrumento> instrumentos;
 
    
 
@@ -76,6 +84,16 @@ public class Usuario implements Serializable {
     public void setAgrupacion(String agrupacion) {
 	this.agrupacion = agrupacion;
 	
+    }
+
+    public List<Evento> getEventos() {
+	
+	return eventos;
+    }
+
+    public List<Instrumento> getInstrumentos() {
+	
+	return instrumentos;
     }
 
 }

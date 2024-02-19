@@ -7,12 +7,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import lombok.Data;
+import tfg.socialmediamusicapi.domain.Evento;
+import tfg.socialmediamusicapi.domain.Instrumento;
 import tfg.socialmediamusicapi.domain.Interes;
 import tfg.socialmediamusicapi.domain.Usuario;
 import tfg.socialmediamusicapi.dto.UsuarioDtoGet;
 import tfg.socialmediamusicapi.dto.UsuarioDtoPost;
 import tfg.socialmediamusicapi.dto.UsuarioDtoPut;
 import tfg.socialmediamusicapi.dto.mapper.UsuarioMapper;
+import tfg.socialmediamusicapi.repository.EventoRepository;
+import tfg.socialmediamusicapi.repository.InstrumentoRepository;
 import tfg.socialmediamusicapi.repository.InteresRepository;
 import tfg.socialmediamusicapi.repository.UsuarioRepository;
 import tfg.socialmediamusicapi.service.UsuarioService;
@@ -26,6 +30,12 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Autowired
     private InteresRepository repositoryInteres;
+    
+    @Autowired
+    private EventoRepository repositoryEvento;
+    
+    @Autowired
+    private InstrumentoRepository repositoryInstrumento;
 
     @Autowired
     private UsuarioMapper mapper;
@@ -112,6 +122,8 @@ public class UsuarioServiceImpl implements UsuarioService {
 	    Usuario usuario = usuarioEntity.orElseThrow();
 	    usuario.getIntereses().forEach(interes -> interes.getUsuarios().remove(usuario));
 	    usuario.getIntereses().clear();
+	    usuario.getEventos().forEach(evento -> evento.getUsuarios().remove(usuario));
+	    usuario.getEventos().clear();
 	    repository.delete(usuario);
 	} else {
 
@@ -135,6 +147,76 @@ public class UsuarioServiceImpl implements UsuarioService {
 
 	    repository.save(usuario);
 	    repositoryInteres.save(interes);
+
+	} else {
+
+	    throw new IllegalArgumentException(message);
+	}
+	
+    }
+
+    @Override
+    public void agregarEvento(long usuarioId, long eventoId) {
+	Optional<Usuario> usuarioEntity = repository.findById(usuarioId);
+	Optional<Evento> eventoEntity =  repositoryEvento.findById(eventoId);
+
+	if (usuarioEntity.isPresent() && eventoEntity.isPresent()) {
+
+	    Usuario usuario = usuarioEntity.orElseThrow();
+	    Evento evento = eventoEntity.orElseThrow();
+
+	    usuario.getEventos().add(evento);
+	    evento.getUsuarios().add(usuario);
+
+	    repository.save(usuario);
+	    repositoryEvento.save(evento);
+
+	} else {
+
+	    throw new IllegalArgumentException(message);
+	}
+	
+	
+    }
+
+    @Override
+    public void eliminarEvento(long usuarioId, long eventoId) {
+	Optional<Usuario> usuarioEntity = repository.findById(usuarioId);
+	Optional<Evento> eventoEntity = repositoryEvento.findById(eventoId);
+	
+	if (usuarioEntity.isPresent() && eventoEntity.isPresent()) {
+
+	    Usuario usuario = usuarioEntity.orElseThrow();
+	    Evento evento = eventoEntity.orElseThrow();
+
+	    usuario.getEventos().remove(evento);
+	    evento.getUsuarios().remove(usuario);
+
+	    repository.save(usuario);
+	    repositoryEvento.save(evento);
+
+	} else {
+
+	    throw new IllegalArgumentException(message);
+	}
+	
+    }
+
+    @Override
+    public void agregarInstrumento(long usuarioId, long instrumentoId) {
+	Optional<Usuario> usuarioEntity = repository.findById(usuarioId);
+	Optional<Instrumento> isntrumentoEntity = repositoryInstrumento.findById(instrumentoId);
+
+	if (usuarioEntity.isPresent() && isntrumentoEntity.isPresent()) {
+
+	    Usuario usuario = usuarioEntity.orElseThrow();
+	    Instrumento isntrumento = isntrumentoEntity.orElseThrow();
+
+	    usuario.getInstrumentos().add(isntrumento);
+	    isntrumento.getUsuarios().add(usuario);
+
+	    repository.save(usuario);
+	    repositoryInstrumento.save(isntrumento);
 
 	} else {
 

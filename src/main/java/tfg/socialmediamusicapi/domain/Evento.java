@@ -2,12 +2,18 @@ package tfg.socialmediamusicapi.domain;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
@@ -47,6 +53,38 @@ public class Evento implements Serializable {
 
     @Column(name = "FOTO")
     private String foto;
+    
+    @ManyToMany(mappedBy = "eventos", fetch = FetchType.LAZY)
+    private List<Usuario> usuarios;
+    
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinTable(name = "EVENTO_INSTRUMENTO", joinColumns = @JoinColumn(name = "EVENTO_ID"), inverseJoinColumns = @JoinColumn(name = "INSTRUMENTO_ID"))
+    private List<Instrumento> instrumentos;
+
+    public List<Usuario> getUsuarios() {
+	
+	return usuarios;
+    }
+
+    public void setTitulo(String titulo) {
+	this.titulo = titulo;
+	
+    }
+
+    public void setFecha(LocalDateTime fecha) {
+	this.fecha = fecha;
+	
+    }
+
+    public void setDireccion(String direccion) {
+	this.direccion = direccion;
+	
+    }
+
+    public List<Instrumento> getInstrumentos() {
+	
+	return instrumentos;
+    }
     
    
    
