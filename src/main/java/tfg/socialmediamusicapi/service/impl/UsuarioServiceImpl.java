@@ -1,7 +1,7 @@
 package tfg.socialmediamusicapi.service.impl;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -51,18 +51,10 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     public UsuarioDtoGet findById(long id) {
+	Usuario usuario = repository.findById(id)
+		.orElseThrow(() -> new NoSuchElementException("El usuario con ID " + id + " no existe"));
 
-	Optional<Usuario> entity = repository.findById(id);
-
-	if (entity.isPresent()) {
-	    Usuario usuario = entity.orElseThrow();
-	    return mapper.fromEnity(usuario);
-
-	} else {
-
-	    throw new IllegalArgumentException(message);
-	}
-
+	return mapper.fromEnity(usuario);
     }
 
     @Override
@@ -76,154 +68,127 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     public void modificarUsuario(long id, UsuarioDtoPut usuarioDto) {
-	Optional<Usuario> usuarioEntity = repository.findById(id);
+        Usuario usuario = repository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("El usuario con ID " + id + " no existe"));
 
-	if (usuarioEntity.isPresent()) {
-
-	    Usuario usuario = usuarioEntity.orElseThrow();
-	    usuario.setNombre(usuarioDto.getNombre());
-	    usuario.setCiudad(usuarioDto.getCiudad());
-	    usuario.setAgrupacion(usuarioDto.getAgrupacion());
-	    repository.save(usuario);
-
-	} else {
-	    throw new IllegalArgumentException(message);
-	}
+        usuario.setNombre(usuarioDto.getNombre());
+        usuario.setCiudad(usuarioDto.getCiudad());
+        usuario.setAgrupacion(usuarioDto.getAgrupacion());
+        repository.save(usuario);
     }
+
 
     @Override
     public void agregarInteres(long usuarioId, long interesId) {
-	Optional<Usuario> usuarioEntity = repository.findById(usuarioId);
-	Optional<Interes> interesEntity = repositoryInteres.findById(interesId);
+	Usuario usuario = repository.findById(usuarioId)
+		.orElseThrow(() -> new NoSuchElementException("El usuario con ID " + usuarioId + " no existe"));
 
-	if (usuarioEntity.isPresent() && interesEntity.isPresent()) {
+	Interes interes = repositoryInteres.findById(interesId)
+		.orElseThrow(() -> new NoSuchElementException("El interés con ID " + interesId + " no existe"));
 
-	    Usuario usuario = usuarioEntity.orElseThrow();
-	    Interes interes = interesEntity.orElseThrow();
+	usuario.getIntereses().add(interes);
+	interes.getUsuarios().add(usuario);
 
-	    usuario.getIntereses().add(interes);
-	    interes.getUsuarios().add(usuario);
-
-	    repository.save(usuario);
-	    repositoryInteres.save(interes);
-
-	} else {
-
-	    throw new IllegalArgumentException(message);
-	}
+	repository.save(usuario);
+	repositoryInteres.save(interes);
 
     }
 
     @Override
     public void eliminarUsuario(long id) {
-	Optional<Usuario> usuarioEntity = repository.findById(id);
+        Usuario usuario = repository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("El usuario con ID " + id + " no existe"));
 
-	if (usuarioEntity.isPresent()) {
-	    Usuario usuario = usuarioEntity.orElseThrow();
-	    usuario.getIntereses().forEach(interes -> interes.getUsuarios().remove(usuario));
-	    usuario.getIntereses().clear();
-	    usuario.getEventos().forEach(evento -> evento.getUsuarios().remove(usuario));
-	    usuario.getEventos().clear();
-	    repository.delete(usuario);
-	} else {
-
-	    throw new IllegalArgumentException(message);
-
-	}
+        usuario.getIntereses().forEach(interes -> interes.getUsuarios().remove(usuario));
+        usuario.getIntereses().clear();
+        usuario.getEventos().forEach(evento -> evento.getUsuarios().remove(usuario));
+        usuario.getEventos().clear();
+        usuario.getInstrumentos().forEach(isntrumento -> isntrumento.getUsuarios().remove(usuario));
+        usuario.getInstrumentos().clear();
+        
+        repository.delete(usuario);
     }
+
 
     @Override
     public void eliminarInteres(long usuarioId, long interesId) {
-	Optional<Usuario> usuarioEntity = repository.findById(usuarioId);
-	Optional<Interes> interesEntity = repositoryInteres.findById(interesId);
-	
-	if (usuarioEntity.isPresent() && interesEntity.isPresent()) {
+        Usuario usuario = repository.findById(usuarioId)
+                .orElseThrow(() -> new NoSuchElementException("El usuario con ID " + usuarioId + " no existe"));
 
-	    Usuario usuario = usuarioEntity.orElseThrow();
-	    Interes interes = interesEntity.orElseThrow();
+        Interes interes = repositoryInteres.findById(interesId)
+                .orElseThrow(() -> new NoSuchElementException("El interés con ID " + interesId + " no existe"));
 
-	    usuario.getIntereses().remove(interes);
-	    interes.getUsuarios().remove(usuario);
+        usuario.getIntereses().remove(interes);
+        interes.getUsuarios().remove(usuario);
 
-	    repository.save(usuario);
-	    repositoryInteres.save(interes);
-
-	} else {
-
-	    throw new IllegalArgumentException(message);
-	}
-	
+        repository.save(usuario);
+        repositoryInteres.save(interes);
     }
+
 
     @Override
     public void agregarEvento(long usuarioId, long eventoId) {
-	Optional<Usuario> usuarioEntity = repository.findById(usuarioId);
-	Optional<Evento> eventoEntity =  repositoryEvento.findById(eventoId);
+        Usuario usuario = repository.findById(usuarioId)
+                .orElseThrow(() -> new NoSuchElementException("El usuario con ID " + usuarioId + " no existe"));
 
-	if (usuarioEntity.isPresent() && eventoEntity.isPresent()) {
+        Evento evento = repositoryEvento.findById(eventoId)
+                .orElseThrow(() -> new NoSuchElementException("El evento con ID " + eventoId + " no existe"));
 
-	    Usuario usuario = usuarioEntity.orElseThrow();
-	    Evento evento = eventoEntity.orElseThrow();
+        usuario.getEventos().add(evento);
+        evento.getUsuarios().add(usuario);
 
-	    usuario.getEventos().add(evento);
-	    evento.getUsuarios().add(usuario);
-
-	    repository.save(usuario);
-	    repositoryEvento.save(evento);
-
-	} else {
-
-	    throw new IllegalArgumentException(message);
-	}
-	
-	
+        repository.save(usuario);
+        repositoryEvento.save(evento);
     }
+
 
     @Override
     public void eliminarEvento(long usuarioId, long eventoId) {
-	Optional<Usuario> usuarioEntity = repository.findById(usuarioId);
-	Optional<Evento> eventoEntity = repositoryEvento.findById(eventoId);
-	
-	if (usuarioEntity.isPresent() && eventoEntity.isPresent()) {
+        Usuario usuario = repository.findById(usuarioId)
+                .orElseThrow(() -> new NoSuchElementException("El usuario con ID " + usuarioId + " no existe"));
 
-	    Usuario usuario = usuarioEntity.orElseThrow();
-	    Evento evento = eventoEntity.orElseThrow();
+        Evento evento = repositoryEvento.findById(eventoId)
+                .orElseThrow(() -> new NoSuchElementException("El evento con ID " + eventoId + " no existe"));
 
-	    usuario.getEventos().remove(evento);
-	    evento.getUsuarios().remove(usuario);
+        usuario.getEventos().remove(evento);
+        evento.getUsuarios().remove(usuario);
 
-	    repository.save(usuario);
-	    repositoryEvento.save(evento);
-
-	} else {
-
-	    throw new IllegalArgumentException(message);
-	}
-	
+        repository.save(usuario);
+        repositoryEvento.save(evento);
     }
+
 
     @Override
     public void agregarInstrumento(long usuarioId, long instrumentoId) {
-	Optional<Usuario> usuarioEntity = repository.findById(usuarioId);
-	Optional<Instrumento> isntrumentoEntity = repositoryInstrumento.findById(instrumentoId);
+        Usuario usuario = repository.findById(usuarioId)
+                .orElseThrow(() -> new NoSuchElementException("El usuario con ID " + usuarioId + " no existe"));
 
-	if (usuarioEntity.isPresent() && isntrumentoEntity.isPresent()) {
+        Instrumento instrumento = repositoryInstrumento.findById(instrumentoId)
+                .orElseThrow(() -> new NoSuchElementException("El instrumento con ID " + instrumentoId + " no existe"));
 
-	    Usuario usuario = usuarioEntity.orElseThrow();
-	    Instrumento isntrumento = isntrumentoEntity.orElseThrow();
+        usuario.getInstrumentos().add(instrumento);
+        instrumento.getUsuarios().add(usuario);
 
-	    usuario.getInstrumentos().add(isntrumento);
-	    isntrumento.getUsuarios().add(usuario);
+        repository.save(usuario);
+        repositoryInstrumento.save(instrumento);
+    }
 
-	    repository.save(usuario);
-	    repositoryInstrumento.save(isntrumento);
+    @Override
+    public void eliminarInstrumento(long usuarioId, long isntrumentoId) {
+	Usuario usuario = repository.findById(usuarioId)
+                .orElseThrow(() -> new NoSuchElementException("El usuario con ID " + usuarioId + " no existe"));
 
-	} else {
+        Instrumento instrumento = repositoryInstrumento.findById(isntrumentoId)
+                .orElseThrow(() -> new NoSuchElementException("El instrumento con ID " + isntrumentoId + " no existe"));
 
-	    throw new IllegalArgumentException(message);
-	}
+        usuario.getInstrumentos().remove(instrumento);
+        instrumento.getUsuarios().remove(usuario);
+
+        repository.save(usuario);
+        repositoryInstrumento.save(instrumento);
 	
     }
+
 
     
 

@@ -1,6 +1,9 @@
 package tfg.socialmediamusicapi.controller;
 
 import java.util.List;
+import java.util.NoSuchElementException;
+
+import javax.persistence.EntityNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,24 +27,30 @@ import tfg.socialmediamusicapi.service.InstrumentoService;
 @RestController
 @Api(tags = "Instrumento Api")
 public class InstrumentoController {
-    
+
     @Autowired
     private InstrumentoService service;
-    
+
     @GetMapping("/instrumentos")
     @Operation(summary = "Recupera todos los instrumentos")
-    public List<InstrumentoDtoGet> getAllUsuarios(){
-	
+    public List<InstrumentoDtoGet> getAllUsuarios() {
+
 	return service.getAllInstrumentos();
     }
-    
+
     @GetMapping("/instrumentos/{id}")
     @Operation(summary = "Recupera un instrumento por id")
-    public InstrumentoDtoGet finById(@PathVariable("id") long id) {
-	
-	return service.findById(id);
+    public ResponseEntity<InstrumentoDtoGet> finById(@PathVariable("id") long id) {
+	try {
+	    InstrumentoDtoGet instrumento = service.findById(id);
+	    return ResponseEntity.ok(instrumento);
+
+	} catch (NoSuchElementException ex) {
+	    throw new NoSuchElementException("Instrumento no encontrado con ID: " + id);
+	}
+
     }
-    
+
     @PostMapping("/instrumentos")
     @Operation(summary = "Guarda un instrumento")
     public ResponseEntity<String> crearInstrumento(@RequestBody InstrumentoDtoPost instrumentoDto) {
@@ -49,22 +58,31 @@ public class InstrumentoController {
 
 	return new ResponseEntity<>("Operación exitosa", HttpStatus.OK);
     }
-    
+
     @PutMapping("/instrumentos/{id}")
     @Operation(summary = "Modifica un instrumento")
-    public ResponseEntity<String> modificarInstrumento(@PathVariable("id") long id, @RequestBody InstrumentoDtoPut instrumentoDto) {
-	service.modificarInstrumento(id, instrumentoDto);
+    public ResponseEntity<String> modificarInstrumento(@PathVariable("id") long id,
+	    @RequestBody InstrumentoDtoPut instrumentoDto) {
+	try {
+	    service.modificarInstrumento(id, instrumentoDto);
+	    return new ResponseEntity<>("Operación exitosa", HttpStatus.OK);
+	} catch (NoSuchElementException ex) {
+	    return ResponseEntity.status(HttpStatus.NOT_FOUND).body("El instrumento con ID " + id + " no existe");
+	} catch (Exception ex) {
 
-	return new ResponseEntity<>("Operación exitosa", HttpStatus.OK);
+	    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al modificar el instrumento");
+	}
     }
-    
+
     @DeleteMapping("/instrumentos/{id}")
     @Operation(summary = "Elimina un instrumento y sus relaciones")
     public ResponseEntity<String> eliminarInstrumento(@PathVariable("id") long id) {
-	service.eliminarInstrumento(id);
-	
-	return new ResponseEntity<>("Operación exitosa", HttpStatus.OK);
+	try {
+	    service.eliminarInstrumento(id);
+	    return new ResponseEntity<>("Operación exitosa", HttpStatus.OK);
+	} catch (EntityNotFoundException ex) {
+	    return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Instrumento no encontrado: " + ex.getMessage());
+	}
     }
-
 
 }

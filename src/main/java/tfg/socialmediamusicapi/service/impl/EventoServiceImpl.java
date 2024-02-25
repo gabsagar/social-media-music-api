@@ -1,7 +1,10 @@
 package tfg.socialmediamusicapi.service.impl;
 
+import java.time.DayOfWeek;
+import java.time.LocalDateTime;
+import java.time.temporal.TemporalAdjusters;
 import java.util.List;
-import java.util.Optional;
+import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,7 +24,7 @@ public class EventoServiceImpl implements EventoService {
 
     @Autowired
     private EventoRepository repository;
-    
+
     @Autowired
     private InstrumentoRepository repositoryInstrumento;
 
@@ -41,16 +44,11 @@ public class EventoServiceImpl implements EventoService {
 
     @Override
     public EventoDtoGet findById(long id) {
-	Optional<Evento> entity = repository.findById(id);
 
-	if (entity.isPresent()) {
-	    Evento evento = entity.orElseThrow();
-	    return mapper.fromEnity(evento);
+	Evento evento = repository.findById(id)
+		.orElseThrow(() -> new NoSuchElementException("El evento con ID " + id + " no existe"));
 
-	} else {
-
-	    throw new IllegalArgumentException(message);
-	}
+	return mapper.fromEnity(evento);
     }
 
     @Override
@@ -64,73 +62,106 @@ public class EventoServiceImpl implements EventoService {
 
     @Override
     public List<EventoDtoGet> findByTipo(String tipo) {
+        List<Evento> eventos = repository.findByTipo(tipo);
 
-	List<Evento> eventos = repository.findByTipo(tipo);
+        if (eventos.isEmpty()) {
+            throw new NoSuchElementException("No se encontraron eventos con tipo: " + tipo);
+        }
 
-	return mapper.fromDtoList(eventos);
-
+        return mapper.fromDtoList(eventos);
     }
+
+
+    @Override
+    public List<EventoDtoGet> findByFecha(LocalDateTime fecha) {
+        List<Evento> eventos = repository.findByFecha(fecha);
+
+        if (eventos.isEmpty()) {
+            throw new NoSuchElementException("No se encontraron eventos para la fecha: " + fecha);
+        }
+
+        return mapper.fromDtoList(eventos);
+    }
+
 
     @Override
     public void modificarEvento(long id, EventoDtoPut eventoDto) {
-	Optional<Evento> eventoEntity = repository.findById(id);
+	Evento evento = repository.findById(id)
+		.orElseThrow(() -> new NoSuchElementException("El evento con ID " + id + " no existe"));
 
-	if (eventoEntity.isPresent()) {
+	evento.setTitulo(eventoDto.getTitulo());
+	evento.setFecha(eventoDto.getFecha());
+	evento.setDireccion(eventoDto.getDireccion());
+	repository.save(evento);
 
-	    Evento evento = eventoEntity.orElseThrow();
-	    evento.setTitulo(eventoDto.getTitulo());
-	    evento.setFecha(eventoDto.getFecha());
-	    evento.setDireccion(eventoDto.getDireccion());
-	    repository.save(evento);
-
-	} else {
-	    throw new IllegalArgumentException(message);
-	}
+	repository.save(evento);
 
     }
 
     @Override
     public void eliminarEvento(long id) {
-	Optional<Evento> eventoEntity = repository.findById(id);
+	Evento evento = repository.findById(id)
+		.orElseThrow(() -> new NoSuchElementException("El evento con ID " + id + " no existe"));
 
-	if (eventoEntity.isPresent()) {
-	    Evento evento = eventoEntity.orElseThrow();
-	    evento.getUsuarios().forEach(usuario -> usuario.getEventos().remove(evento));
-	    evento.getUsuarios().clear();
-	    
-	    evento.getInstrumentos().forEach(instrumento -> instrumento.getEventos().remove(evento));
-	    evento.getInstrumentos().clear();
+	evento.getUsuarios().forEach(usuario -> usuario.getEventos().remove(evento));
+	evento.getUsuarios().clear();
 
-	    repository.delete(evento);
-	} else {
+	evento.getInstrumentos().forEach(instrumento -> instrumento.getEventos().remove(evento));
+	evento.getInstrumentos().clear();
 
-	    throw new IllegalArgumentException(message);
-
-	}
+	repository.delete(evento);
 
     }
 
     @Override
     public void agregarInstrumentoEvento(long eventoId, long instrumentoId) {
-	Optional<Evento> eventoEntity = repository.findById(eventoId);
-	Optional<Instrumento> isntrumentoEntity = repositoryInstrumento.findById(instrumentoId);
+        Evento evento = repository.findById(eventoId)
+                .orElseThrow(() -> new NoSuchElementException("El evento con ID " + eventoId + " no existe"));
 
-	if (eventoEntity.isPresent() && isntrumentoEntity.isPresent()) {
+        Instrumento instrumento = repositoryInstrumento.findById(instrumentoId)
+                .orElseThrow(() -> new NoSuchElementException("El instrumento con ID " + instrumentoId + " no existe"));
 
-	    Evento evento = eventoEntity.orElseThrow();
-	    Instrumento isntrumento = isntrumentoEntity.orElseThrow();
+        evento.getInstrumentos().add(instrumento);
+        instrumento.getEventos().add(evento);
 
-	    evento.getInstrumentos().add(isntrumento);
-	    isntrumento.getEventos().add(evento);
-
-	    repository.save(evento);
-	    repositoryInstrumento.save(isntrumento);
-
-	} else {
-
-	    throw new IllegalArgumentException(message);
-	}
-	
+        repository.save(evento);
+        repositoryInstrumento.save(instrumento);
     }
+
+    
+
+    @Override
+    public List<EventoDtoGet> findEventosEstaSemana() {
+        LocalDateTime hoy = LocalDateTime.now();
+
+        LocalDateTime inicioSemana = hoy.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+        LocalDateTime finSemana = hoy.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
+
+        List<Evento> eventosEstaSemana = repository.findByFechaBetween(inicioSemana, finSemana);
+
+        if (eventosEstaSemana.isEmpty()) {
+            throw new NoSuchElementException("No se encontraron eventos para la semana actual");
+        }
+
+        return mapper.fromDtoList(eventosEstaSemana);
+    }
+
+
+    @Override
+    public List<EventoDtoGet> findEventosFinDeSemana() {
+        LocalDateTime hoy = LocalDateTime.now();
+
+        LocalDateTime inicioFinDeSemana = hoy.with(TemporalAdjusters.next(DayOfWeek.FRIDAY));
+        LocalDateTime finFinDeSemana = inicioFinDeSemana.plusDays(2);
+
+        List<Evento> eventosProximoFinDeSemana = repository.findByFechaBetween(inicioFinDeSemana, finFinDeSemana);
+
+        if (eventosProximoFinDeSemana.isEmpty()) {
+            throw new NoSuchElementException("No se encontraron eventos para el próximo fin de semana");
+        }
+
+        return mapper.fromDtoList(eventosProximoFinDeSemana);
+    }
+
 
 }

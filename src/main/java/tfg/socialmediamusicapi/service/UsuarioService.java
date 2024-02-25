@@ -32,6 +32,8 @@ public interface UsuarioService {
 
     void agregarInstrumento(long usuarioId, long instrumentoId);
 
+    void eliminarInstrumento(long usuarioId, long isntrumentoId);
+
    
     
 }

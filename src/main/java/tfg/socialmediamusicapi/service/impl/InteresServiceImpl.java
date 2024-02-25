@@ -1,7 +1,7 @@
 package tfg.socialmediamusicapi.service.impl;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,16 +36,10 @@ public class InteresServiceImpl implements InteresService {
 
     @Override
     public InteresDtoGet findById(long id) {
-	Optional<Interes> entity = repository.findById(id);
+	Interes interes = repository.findById(id)
+		.orElseThrow(() -> new NoSuchElementException("El interes con ID " + id + " no existe"));
 
-	if (entity.isPresent()) {
-	    Interes interes = entity.orElseThrow();
-	    return mapper.fromEnity(interes);
-
-	} else {
-
-	    throw new IllegalArgumentException(message);
-	}
+	return mapper.fromEnity(interes);
     }
 
     @Override
@@ -59,35 +53,23 @@ public class InteresServiceImpl implements InteresService {
 
     @Override
     public void modificarInteres(long id, InteresDtoPut interesDto) {
-	Optional<Interes> interesEntity = repository.findById(id);
+	Interes interes = repository.findById(id)
+		.orElseThrow(() -> new NoSuchElementException("El interes con ID " + id + " no existe"));
 
-	if (interesEntity.isPresent()) {
+	interes.setNombre(interesDto.getNombre());
 
-	    Interes interes = interesEntity.orElseThrow();
-	    interes.setNombre(interesDto.getNombre());
-
-	    repository.save(interes);
-
-	} else {
-	    throw new IllegalArgumentException(message);
-	}
+	repository.save(interes);
     }
 
     @Override
     public void eliminarInteres(long id) {
-	Optional<Interes> interesEntity = repository.findById(id);
+	Interes interes = repository.findById(id)
+		.orElseThrow(() -> new NoSuchElementException("El interes con ID " + id + " no existe"));
 
-	if (interesEntity.isPresent()) {
-	    Interes interes = interesEntity.orElseThrow();
-	    interes.getUsuarios().forEach(usuario -> usuario.getIntereses().remove(interes));
-	    interes.getUsuarios().clear();
-	    repository.delete(interes);
-	} else {
+	interes.getUsuarios().forEach(usuario -> usuario.getIntereses().remove(interes));
+	interes.getUsuarios().clear();
+	repository.delete(interes);
 
-	    throw new IllegalArgumentException(message);
-
-	}
-	
     }
 
 }

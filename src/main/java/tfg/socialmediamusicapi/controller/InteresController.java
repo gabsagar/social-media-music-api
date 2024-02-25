@@ -1,6 +1,9 @@
 package tfg.socialmediamusicapi.controller;
 
 import java.util.List;
+import java.util.NoSuchElementException;
+
+import javax.persistence.EntityNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,24 +27,30 @@ import tfg.socialmediamusicapi.service.InteresService;
 @RestController
 @Api(tags = "Interes Api")
 public class InteresController {
-    
+
     @Autowired
     private InteresService service;
-    
+
     @GetMapping("/intereses")
     @Operation(summary = "Recupera todos los intereses")
-    public List<InteresDtoGet> getAllUsuarios(){
-	
+    public List<InteresDtoGet> getAllUsuarios() {
+
 	return service.getAllIntereses();
     }
-    
+
     @GetMapping("/intereses/{id}")
     @Operation(summary = "Recupera un interes por id")
-    public InteresDtoGet finById(@PathVariable("id") long id) {
-	
-	return service.findById(id);
+    public ResponseEntity<InteresDtoGet> finById(@PathVariable("id") long id) {
+	try {
+	    InteresDtoGet interes = service.findById(id);
+	    return ResponseEntity.ok(interes);
+
+	} catch (NoSuchElementException ex) {
+	    throw new NoSuchElementException("Interes no encontrado con ID: " + id);
+	}
+
     }
-    
+
     @PostMapping("/intereses")
     @Operation(summary = "Guarda un interes")
     public ResponseEntity<String> crearInteres(@RequestBody InteresDtoPost interesDto) {
@@ -49,20 +58,30 @@ public class InteresController {
 
 	return new ResponseEntity<>("Operación exitosa", HttpStatus.OK);
     }
-    
+
     @PutMapping("/intereses/{id}")
     @Operation(summary = "Modifica un interes")
     public ResponseEntity<String> modificarInteres(@PathVariable("id") long id, @RequestBody InteresDtoPut interesDto) {
-	service.modificarInteres(id, interesDto);
+	try {
+	    service.modificarInteres(id, interesDto);
+	    return new ResponseEntity<>("Operación exitosa", HttpStatus.OK);
+	} catch (NoSuchElementException ex) {
+	    return ResponseEntity.status(HttpStatus.NOT_FOUND).body("El interes con ID " + id + " no existe");
+	} catch (Exception ex) {
 
-	return new ResponseEntity<>("Operación exitosa", HttpStatus.OK);
+	    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al modificar el usuario");
+	}
     }
-    
+
     @DeleteMapping("/intereses/{id}")
     @Operation(summary = "Elimina un interes y sus relaciones")
     public ResponseEntity<String> eliminarInteres(@PathVariable("id") long id) {
-	service.eliminarInteres(id);
-	return new ResponseEntity<>("Operación exitosa", HttpStatus.OK);
+	try {
+	    service.eliminarInteres(id);
+	    return new ResponseEntity<>("Operación exitosa", HttpStatus.OK);
+	} catch (EntityNotFoundException ex) {
+	    return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Interes no encontrado: " + ex.getMessage());
+	}
     }
 
 }

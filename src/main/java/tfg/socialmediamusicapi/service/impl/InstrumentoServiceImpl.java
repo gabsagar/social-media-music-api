@@ -1,7 +1,7 @@
 package tfg.socialmediamusicapi.service.impl;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,39 +15,31 @@ import tfg.socialmediamusicapi.repository.InstrumentoRepository;
 import tfg.socialmediamusicapi.service.InstrumentoService;
 
 @Service
-public class InstrumentoServiceImpl implements InstrumentoService{
-    
-    
+public class InstrumentoServiceImpl implements InstrumentoService {
+
     @Autowired
     private InstrumentoRepository repository;
-    
+
     @Autowired
     private InstrumentoMapper mapper;
-    
+
     String message = "El id no existe";
 
     @Override
     public List<InstrumentoDtoGet> getAllInstrumentos() {
-	
+
 	List<Instrumento> instrumentos = repository.findAll();
-	
+
 	return mapper.fromDtoList(instrumentos);
-	
-	
+
     }
 
     @Override
     public InstrumentoDtoGet findById(long id) {
-	Optional<Instrumento> entity = repository.findById(id);
+	Instrumento instrumento = repository.findById(id)
+		.orElseThrow(() -> new NoSuchElementException("El instrumento con ID " + id + " no existe"));
 
-	if (entity.isPresent()) {
-	    Instrumento instrumento = entity.orElseThrow();
-	    return mapper.fromEnity(instrumento);
-
-	} else {
-
-	    throw new IllegalArgumentException(message);
-	}
+	return mapper.fromEnity(instrumento);
     }
 
     @Override
@@ -60,41 +52,28 @@ public class InstrumentoServiceImpl implements InstrumentoService{
 
     @Override
     public void modificarInstrumento(long id, InstrumentoDtoPut instrumentoDto) {
-	Optional<Instrumento> instrumentoEntity = repository.findById(id);
+	Instrumento instrumento = repository.findById(id)
+		.orElseThrow(() -> new NoSuchElementException("El instrumento con ID " + id + " no existe"));
 
-	if (instrumentoEntity.isPresent()) {
+	instrumento.setNombre(instrumentoDto.getNombre());
 
-	    Instrumento instrumento = instrumentoEntity.orElseThrow();
-	    instrumento.setNombre(instrumentoDto.getNombre());
-
-	    repository.save(instrumento);
-
-	} else {
-	    throw new IllegalArgumentException(message);
-	}
+	repository.save(instrumento);
 
     }
 
     @Override
     public void eliminarInstrumento(long id) {
-	Optional<Instrumento> instrumentoEntity = repository.findById(id);
+	Instrumento instrumento = repository.findById(id)
+		.orElseThrow(() -> new NoSuchElementException("El instrumento con ID " + id + " no existe"));
 
-	if (instrumentoEntity.isPresent()) {
-	    Instrumento instrumento = instrumentoEntity.orElseThrow();
-	    instrumento.getUsuarios().forEach(usuario -> usuario.getInstrumentos().remove(instrumento));
-	    instrumento.getUsuarios().clear();
-	    
-	    instrumento.getEventos().forEach(evento -> evento.getInstrumentos().remove(instrumento));
-	    instrumento.getEventos().clear();
-	    
-	    repository.delete(instrumento);
-	    
-	} else {
+	instrumento.getUsuarios().forEach(usuario -> usuario.getInstrumentos().remove(instrumento));
+	instrumento.getUsuarios().clear();
 
-	    throw new IllegalArgumentException(message);
+	instrumento.getEventos().forEach(evento -> evento.getInstrumentos().remove(instrumento));
+	instrumento.getEventos().clear();
 
-	}
-	
+	repository.delete(instrumento);
+
     }
 
 }

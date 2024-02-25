@@ -1,8 +1,13 @@
 package tfg.socialmediamusicapi.controller;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.NoSuchElementException;
+
+import javax.persistence.EntityNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -37,17 +42,75 @@ public class EventoController {
 
     @GetMapping("/eventos/{id}")
     @Operation(summary = "Recupera un evento por id")
-    public EventoDtoGet finById(@PathVariable("id") long id) {
+    public ResponseEntity<EventoDtoGet> finById(@PathVariable("id") long id) {
+	try {
+	    EventoDtoGet evento = service.findById(id);
+	    return ResponseEntity.ok(evento);
 
-	return service.findById(id);
+	} catch (NoSuchElementException ex) {
+	    throw new NoSuchElementException("Evento no encontrado con ID: " + id);
+	}
+
     }
 
     @GetMapping("/eventosTipo/{tipo}")
     @Operation(summary = "Recupera eventos por tipo")
-    public List<EventoDtoGet> finByTipo(@PathVariable("tipo") String tipo) {
-	return service.findByTipo(tipo);
+    public ResponseEntity<List<EventoDtoGet>> findByTipo(@PathVariable("tipo") String tipo) {
+	try {
+	    List<EventoDtoGet> eventos = service.findByTipo(tipo);
+	    return new ResponseEntity<>(eventos, HttpStatus.OK);
+	} catch (NoSuchElementException ex) {
+	    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+	} catch (Exception ex) {
 
+	    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+	}
     }
+
+    @GetMapping("/eventosFecha/{fecha}")
+    @Operation(summary = "Recupera eventos por fecha")
+    public ResponseEntity<List<EventoDtoGet>> findByFecha(
+	    @PathVariable("fecha") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime fecha) {
+	try {
+	    List<EventoDtoGet> eventos = service.findByFecha(fecha);
+	    return new ResponseEntity<>(eventos, HttpStatus.OK);
+	} catch (NoSuchElementException ex) {
+	    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+	} catch (Exception ex) {
+
+	    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+	}
+    }
+
+    @GetMapping("/eventosSemana")
+    @Operation(summary = "Recupera eventos para la semana actual")
+    public ResponseEntity<List<EventoDtoGet>> findEventosEstaSemana() {
+	try {
+	    List<EventoDtoGet> eventos = service.findEventosEstaSemana();
+	    return new ResponseEntity<>(eventos, HttpStatus.OK);
+	} catch (NoSuchElementException ex) {
+	    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+	} catch (Exception ex) {
+
+	    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+	}
+    }
+
+    @GetMapping("/eventosFinDeSemana")
+    @Operation(summary = "Recupera eventos para el próximo fin de semana")
+    public ResponseEntity<List<EventoDtoGet>> findEventosProximoFinDeSemana() {
+        try {
+            List<EventoDtoGet> eventos = service.findEventosFinDeSemana();
+            if (eventos.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            }
+            return new ResponseEntity<>(eventos, HttpStatus.OK);
+        } catch (Exception ex) {
+            
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
 
     @PostMapping("/eventos")
     @Operation(summary = "Guarda un evento")
@@ -56,29 +119,46 @@ public class EventoController {
 
 	return new ResponseEntity<>("Operación exitosa", HttpStatus.OK);
     }
-    
-    
+
     @PutMapping("/eventos/{id}")
     @Operation(summary = "Modifica un evento")
     public ResponseEntity<String> modificarEvento(@PathVariable("id") long id, @RequestBody EventoDtoPut eventoDto) {
-	service.modificarEvento(id, eventoDto);
+	try {
+	    service.modificarEvento(id, eventoDto);
+	    return new ResponseEntity<>("Operación exitosa", HttpStatus.OK);
+	} catch (NoSuchElementException ex) {
+	    return ResponseEntity.status(HttpStatus.NOT_FOUND).body("El evento con ID " + id + " no existe");
+	} catch (Exception ex) {
 
-	return new ResponseEntity<>("Operación exitosa", HttpStatus.OK);
+	    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al modificar el evento");
+	}
     }
-    
+
     @DeleteMapping("/eventos/{id}")
     @Operation(summary = "Elimina un evento y sus relaciones")
     public ResponseEntity<String> eliminarEvento(@PathVariable("id") long id) {
-	service.eliminarEvento(id);
-	return new ResponseEntity<>("Operación exitosa", HttpStatus.OK);
+	try {
+	    service.eliminarEvento(id);
+	    return new ResponseEntity<>("Operación exitosa", HttpStatus.OK);
+	} catch (EntityNotFoundException ex) {
+	    return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Evento no encontrado: " + ex.getMessage());
+	}
     }
-    
+
     @PutMapping("/{eventoId}/instrumentoEvento/{instrumentoId}")
     @Operation(summary = "Añade un nuevo instrumento a un evento")
-    public ResponseEntity<String> agregarInstrumentoEvento(@PathVariable long eventoId, @PathVariable long instrumentoId) {
-	service.agregarInstrumentoEvento(eventoId, instrumentoId);
-	
-	return new ResponseEntity<>("Operación exitosa", HttpStatus.OK);
+    public ResponseEntity<String> agregarInstrumentoEvento(@PathVariable long eventoId,
+	    @PathVariable long instrumentoId) {
+	try {
+	    service.agregarInstrumentoEvento(eventoId, instrumentoId);
+	    return new ResponseEntity<>("Operación exitosa", HttpStatus.OK);
+	} catch (NoSuchElementException ex) {
+	    return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Recurso no encontrado: " + ex.getMessage());
+	} catch (Exception ex) {
+
+	    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+		    .body("Error al agregar el instrumento al evento");
+	}
     }
 
 }
