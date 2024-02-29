@@ -8,6 +8,7 @@ import tfg.socialmediamusicapi.domain.Interes;
 import tfg.socialmediamusicapi.dto.InteresDtoGet;
 import tfg.socialmediamusicapi.dto.InteresDtoPost;
 
+
 @Mapper(componentModel = "spring")
 public interface InteresMapper {
     

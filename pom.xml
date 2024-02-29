@@ -6,7 +6,6 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<!-- <version>3.0.12</version>-->
 		<version>2.7.9</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
@@ -71,17 +70,16 @@
 			<version>1.4.2.Final</version> <!-- Verifica la última versión
 			disponible -->
 		</dependency>
-		
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.13.2</version>
+		</dependency>
 		<dependency>
 			<groupId>io.springfox</groupId>
 			<artifactId>springfox-boot-starter</artifactId>
 			<version>3.0.0</version>
 		</dependency>
-		<!--<dependency>
-			<groupId>io.springfox</groupId>
-			<artifactId>springfox-swagger-ui</artifactId>
-			<version>3.0.0</version>
-		</dependency>-->
 
 	</dependencies>
 

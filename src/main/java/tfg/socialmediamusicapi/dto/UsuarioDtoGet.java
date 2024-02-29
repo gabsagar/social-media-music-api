@@ -23,5 +23,18 @@ public class UsuarioDtoGet {
     @JsonProperty(value="ciudad")
     private String ciudad;
     
+    @JsonProperty(value = "agrupacion")
+    private String agrupacion;
+
+    public Long getId() {
+	return id;
+    }
+    
+    public UsuarioDtoGet(long id2, String nombre, String ciudad) {
+        this.id = id2;
+        this.nombre = nombre;
+        this.ciudad = ciudad;
+    }
+    
    
 }

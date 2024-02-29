@@ -60,6 +60,15 @@ public class Usuario implements Serializable {
     private List<Instrumento> instrumentos;
 
    
+    public Usuario(long id2, String nombre, String ciudad, String agrupacion, List<Interes> intereses, List<Evento> eventos, List<Instrumento> instrumentos) {
+        this.id = id2;
+        this.nombre = nombre;
+        this.ciudad = ciudad;
+        this.agrupacion = agrupacion;
+        this.intereses = intereses;
+        this.eventos = eventos;
+        this.instrumentos = instrumentos;
+    }
 
     public List<Interes> getIntereses() {
 

@@ -21,7 +21,12 @@ public class UsuarioDtoPost {
     @JsonProperty(value = "agrupacion")
     private String agrupacion;
     
-    
+    public UsuarioDtoPost(String nombre, String ciudad, String agrupacion) {
+       
+        this.nombre = nombre;
+        this.ciudad = ciudad;
+        this.agrupacion = agrupacion;
+    }
 
     public String getNombre() {
 	
